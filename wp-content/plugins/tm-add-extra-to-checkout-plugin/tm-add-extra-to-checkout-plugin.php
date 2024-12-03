@@ -125,6 +125,27 @@ function AEC_custom_plugin_checkbox_html()
 // Genera HTML del testo
 function AEC_custom_plugin_field_html()
 {
-    $value = get_option('AEC_custom_plugin_option', '');
-    echo '<input type="text" name="AEC_custom_plugin_option" id="tmTesto" value="' . esc_attr($value) . '" />';
+    $labelCheck = get_option('AEC_custom_plugin_option', '');
+    echo '<input type="text" name="AEC_custom_plugin_option" id="tmTesto" value="' . esc_attr($labelCheck) . '" />';
+}
+
+
+
+add_filter('the_content', 'aggiungi_contenuto_sotto_titolo');
+function aggiungi_contenuto_sotto_titolo($content)
+{
+    $checked = get_option('AEC_custom_plugin_checkbox', false);
+    if (!$checked) return $content;
+    $labelCheck = get_option('AEC_custom_plugin_option', '');
+    // Esegui solo per le pagine
+    //     if (is_page() && in_the_loop() && is_main_query()) {
+    // Contenuto personalizzato da aggiungere
+    $contenuto_personalizzato = "<div><input type='checkbox' id='customCheck'> ";
+    $contenuto_personalizzato .= "<label for='customCheck'>" . esc_attr($labelCheck) . "</label>";
+    $contenuto_personalizzato .= "</div>";
+
+    // Restituisci il contenuto personalizzato prima del contenuto originale
+    return $contenuto_personalizzato . $content;
+    //  }
+    return $content;
 }
